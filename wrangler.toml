@@ -1,7 +1,7 @@
 # wrangler.toml
 
 compatibility_date = "2025-10-08"
-main = "src/index.ts"
+main = "functions/_worker.ts"
 name = "application"
 upload_source_maps = true
 
