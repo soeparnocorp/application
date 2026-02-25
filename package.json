@@ -16,7 +16,7 @@
     "check": "tsc && wrangler pages deploy . --dry-run",
     "deploy": "wrangler pages deploy .",
     "dev": "wrangler pages dev .",
-    "predeploy": "wrangler d1 migrations apply APPLICATION_DB --remote",
+    "predeploy": "wrangler d1 migrations apply AUTH_DB --remote",
     "typecheck": "tsc --noEmit"
   },
   "engines": {
