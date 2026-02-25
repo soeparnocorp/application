@@ -1,4 +1,4 @@
-// functions/_worker.ts
+// function/_worker.ts
 
 import { issuer } from "@openauthjs/openauth";
 import { CloudflareStorage } from "@openauthjs/openauth/storage/cloudflare";
