@@ -1,0 +1,24 @@
+# wrangler.toml
+
+compatibility_date = "2025-10-08"
+main = "src/index.ts"
+name = "application"
+upload_source_maps = true
+
+# KV namespaces (array dengan [[ ]] untuk setiap item)
+[[kv_namespaces]]
+binding = "APPLICATION_KV"
+id = "13a468e30cc84fe58ff6297d799050f2"
+
+# D1 databases (array dengan [[ ]] untuk setiap item)
+[[d1_databases]]
+binding = "APPLICATION_DB"
+database_name = "readtalk_db"
+database_id = "ff653b9c-4e2c-479d-8aa4-497da62de3c5"
+
+# Observability (object)
+[observability]
+enabled = true
+
+# Compatibility flags (array)
+compatibility_flags = ["nodejs_compat"]
