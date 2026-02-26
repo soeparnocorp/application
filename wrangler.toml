@@ -1,6 +1,7 @@
 # wrangler.toml
 
 compatibility_date = "2025-10-08"
+pages_build_output_dir = "./public"
 main = "./public"
 name = "application"
 upload_source_maps = true
