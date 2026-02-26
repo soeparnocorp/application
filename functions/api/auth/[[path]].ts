@@ -6,15 +6,27 @@ import { PasswordUI } from "@openauthjs/openauth/ui/password";
 import { createSubjects } from "@openauthjs/openauth/subject";
 import { object, string } from "valibot";
 
+// ============ TAMBAHKAN INI ============
+interface Env {
+  AUTH_STORAGE: KVNamespace;
+  AUTH_DB: D1Database;
+}
+
+interface PagesContext {
+  request: Request;
+  env: Env;
+  params: Record<string, string | string[]>;
+  next: () => Promise<Response>;
+}
+// ======================================
+
 const subjects = createSubjects({
-  user: object({
-    id: string(),
-  }),
+  user: object({ id: string() }),
 });
 
-// PAGES FUNCTIONS handler -代替 fetch
-export async function onRequest(context) {
-  const { request, env, next } = context;
+// PAGES FUNCTIONS handler
+export async function onRequest(context: PagesContext) {  // ← tambah type
+  const { request, env } = context;
   const url = new URL(request.url);
 
   // Handle root redirect
@@ -30,7 +42,6 @@ export async function onRequest(context) {
 
   // Buat request object yang pathnya disesuaikan
   const newUrl = new URL(request.url);
-  // Hapus /api/auth dari path karena issuer expects /authorize, /token, dll
   newUrl.pathname = newUrl.pathname.replace(/^\/api\/auth/, '');
   
   const newRequest = new Request(newUrl.toString(), {
@@ -39,23 +50,18 @@ export async function onRequest(context) {
     body: request.body,
   });
 
-  // Panggil issuer dengan format Pages Functions
+  // Panggil issuer
   try {
     const response = await issuer({
-      storage: CloudflareStorage({
-        namespace: env.AUTH_STORAGE,
-      }),
+      storage: CloudflareStorage({ namespace: env.AUTH_STORAGE }),
       subjects,
       providers: {
         password: PasswordProvider(
           PasswordUI({
             sendCode: async (email, code) => {
               console.log(`[OpenAuth] Sending code ${code} to ${email}`);
-              // Di production: kirim email
             },
-            copy: {
-              input_code: "Masukkan kode (cek log Worker atau console)",
-            },
+            copy: { input_code: "Masukkan kode (cek log Worker atau console)" },
           }),
         ),
       },
@@ -86,7 +92,7 @@ export async function onRequest(context) {
   }
 }
 
-// Fungsi getOrCreateUser (sama persis)
+// Fungsi getOrCreateUser
 async function getOrCreateUser(env: Env, email: string): Promise<string> {
   const result = await env.AUTH_DB.prepare(`
     INSERT INTO user (email)
@@ -100,10 +106,4 @@ async function getOrCreateUser(env: Env, email: string): Promise<string> {
   }
   console.log(`Found or created user ${result.id} with email ${email}`);
   return result.id;
-}
-
-// Type Env untuk Pages Functions
-interface Env {
-  AUTH_STORAGE: KVNamespace;
-  AUTH_DB: D1Database;
 }
