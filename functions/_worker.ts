@@ -1,4 +1,4 @@
-// functions/api/auth/[[path]].ts
+// functions/api/auth/_worker.ts
 import { issuer } from "@openauthjs/openauth";
 import { CloudflareStorage } from "@openauthjs/openauth/storage/cloudflare";
 import { PasswordProvider } from "@openauthjs/openauth/provider/password";
