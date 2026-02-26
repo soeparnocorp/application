@@ -1,7 +1,6 @@
 compatibility_date = "2025-10-08"
 pages_build_output_dir = "./public"
 name = "application"
-upload_source_maps = true
 
 [[kv_namespaces]]
 binding = "AUTH_STORAGE"
